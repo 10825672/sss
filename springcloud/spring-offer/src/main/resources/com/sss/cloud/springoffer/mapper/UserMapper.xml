@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sss.cloud.springoffer.dao.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.sss.cloud.springoffer.entity.User" >
+    <id column="uid" property="uid" jdbcType="INTEGER" />
+    <result column="uname" property="uname" jdbcType="VARCHAR" />
+  </resultMap>
+
+<!-- 分条件查询sql 语句 -->
+  <select id="selectCountByCondition" resultType="INTEGER" parameterType="com.sss.cloud.springoffer.entity.User" >
+       select  count(1) 
+    from user  
+  <where>
+      <if test= "uid != null ">
+        and uid = #{uid,jdbcType=INTEGER}      
+      </if>
+      <if test= "uname != null and uname != '' ">
+        and uname = #{uname,jdbcType=VARCHAR}      
+      </if>
+  </where>
+  </select>
+
+<!-- 分条件查询sql 语句 -->
+  <select id="selectByCondition" resultMap="BaseResultMap" parameterType="com.sss.cloud.springoffer.entity.User" >
+       select  <include refid="Base_Column_List" />
+    from user  
+  <where>
+      <if test= "uid != null ">
+        and uid = #{uid,jdbcType=INTEGER}      
+      </if>
+      <if test= "uname != null and uname != '' ">
+        and uname = #{uname,jdbcType=VARCHAR}      
+      </if>
+  </where>
+  </select>
+
+<!-- select部分查询字段集合 -->
+  <sql id="Base_Column_List">
+      uid, uname
+  </sql>
+
+  <!-- 按主键实体查询表信息 -->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.sss.cloud.springoffer.entity.User" >
+    select 
+      uid, uname
+    from user where uid = #{uid,jdbcType=INTEGER}
+  </select>
+
+  <!-- 按表主键删除数据 -->
+  <delete id="deleteByPrimaryKey" parameterType="com.sss.cloud.springoffer.entity.User" >
+    delete from user where uid = #{uid,jdbcType=INTEGER}
+  </delete>
+
+  <!-- 按表主键批量删除数据 -->
+  <delete id="deleteBatchByPrimaryKey" parameterType="java.util.List" >
+    delete from user where 
+    <foreach collection="list" item="item" index="index" open="(" separator="or" close=")">
+        uid = #{item}
+    </foreach>
+  </delete>
+
+  <!-- 可选择性添加数据 -->
+  <insert id="insertSelective"  useGeneratedKeys="true" keyProperty="uid" parameterType="com.sss.cloud.springoffer.entity.User" >
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test= "uid != null ">
+         uid,
+      </if>
+      <if test= "uname != null and uname != '' ">
+         uname,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test= "uid != null ">
+         #{uid,jdbcType=INTEGER},
+      </if>
+      <if test= "uname != null and uname != '' ">
+         #{uname,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <!-- 可批量添加数据 -->
+  <insert id="insertBatch" parameterType="java.util.List" >
+    insert into user (
+         uid,
+         uname)
+    values 
+    <foreach collection="list" item="item" index="index" separator=",">
+         (
+         #{item.uid,jdbcType=INTEGER},
+         #{item.uname,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+
+  <!-- 按主键更新表中所有字段信息（create_time,c_time_stamp字段除外）-->
+  <update id="updateByPrimaryKeySelective" parameterType="com.sss.cloud.springoffer.entity.User" >
+    update user
+    <set>
+      <if test= "uid != null ">
+      uid = #{uid,jdbcType=INTEGER},
+      </if>
+      <if test= "uname != null and uname != '' ">
+      uname = #{uname,jdbcType=VARCHAR}
+      </if>
+    </set>
+    where uid = #{uid,jdbcType=INTEGER}
+  </update>
+
+</mapper>

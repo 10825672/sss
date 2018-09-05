@@ -7,7 +7,7 @@ package com.sss.cloud.springserver;
 @EnableEurekaServer
 @SpringBootApplication
 public class SpringServerApplication {
-
+//sssssssssssssssss
     public static void main(String[] args) {
         SpringApplication.run(SpringServerApplication.class, args);
     }
